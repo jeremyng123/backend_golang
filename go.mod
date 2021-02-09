@@ -3,7 +3,6 @@ module github.com/jeremyng123/backend_golang
 go 1.15
 
 require (
-	github.com/gofiber/fiber v1.14.6
 	github.com/gofiber/fiber/v2 v2.4.1
 	github.com/google/go-cmp v0.5.4 // indirect
 	go.mongodb.org/mongo-driver v1.4.6

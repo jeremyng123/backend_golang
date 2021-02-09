@@ -12,7 +12,7 @@ func GetPerson(c *fiber.Ctx) {
 }
 
 func CreatePerson(c *fiber.Ctx) {
-	collection, err := GetMongoDbCollection(dbName, collectionName)
+	collection, err := GetMongoDbCollection(DB_NAME, collectionName)
 	if err != nil {
 		c.Status(500).Send(err)
 		return
