@@ -1,0 +1,9 @@
+{
+    "go.useLanguageServer": true,
+    "go.languageServerExperimentalFeatures": {
+        "diagnostics": true
+    },
+    "gopls": {
+        "ui.completion.usePlaceholders": true,
+    },
+}
