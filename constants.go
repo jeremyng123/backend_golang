@@ -1,5 +1,5 @@
 package main
 
-const DB_NAME = "Persons"
+const DBName = "Persons"
 const collectionName = "Person"
-const port = ":800"
+const port = ":3000"

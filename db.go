@@ -9,8 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-//GetMongoDbConnection get connection of mongodb
-func GetMongoDbConnection() (*mongo.Client, error) {
+//GetMongoDBConnection get connection of mongodb
+func GetMongoDBConnection() (*mongo.Client, error) {
 	// Run the following command first in order to be able to connect to mongodb locally!
 	// docker run --name mongo-db -p 27017:27017 -d mongo:latest
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
@@ -27,14 +27,14 @@ func GetMongoDbConnection() (*mongo.Client, error) {
 	return client, nil
 }
 
-func GetMongoDbCollection(DbName string, CollectionName string) (*mongo.Collection, error) {
-	client, err := GetMongoDbConnection()
+func GetMongoDBCollection(DBName string, CollectionName string) (*mongo.Collection, error) {
+	client, err := GetMongoDBConnection()
 
 	if err != nil {
 		return nil, err
 	}
 
-	collection := client.Database(DbName).Collection(CollectionName)
+	collection := client.Database(DBName).Collection(CollectionName)
 
 	return collection, nil
 }

@@ -11,14 +11,14 @@ import (
 
 type Person struct {
 	_id       string `json:"id,omitempty"`
-	FirstName string `json:”firstname,omitempty”`
-	LastName  string `json:”lastname,omitempty”`
-	Email     string `json:”email,omitempty”`
-	Age       int    `json:”age,omitempty”`
+	FirstName string `json:"firstname,omitempty"`
+	LastName  string `json:"lastname,omitempty"`
+	Email     string `json:"email,omitempty"`
+	Age       int    `json:"age,omitempty"`
 }
 
 func GetPerson(c *fiber.Ctx) error {
-	collection, err := GetMongoDbCollection(DB_NAME, collectionName)
+	collection, err := GetMongoDBCollection(DBName, collectionName)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
 		return err
@@ -34,29 +34,30 @@ func GetPerson(c *fiber.Ctx) error {
 
 	var results []bson.M
 	cur, err := collection.Find(context.Background(), filter)
-	defer cur.Close(context.Background())
-
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
+	defer cur.Close(context.Background())
 
 	cur.All(context.Background(), &results)
 
 	if results == nil {
 		c.SendStatus(fiber.StatusNotFound)
-		return
+		return nil
 	}
 
 	json, _ := json.Marshal(results)
 	c.Send(json)
+
+	return nil
 }
 
-func CreatePerson(c *fiber.Ctx) {
-	collection, err := GetMongoDbCollection(DB_NAME, collectionName)
+func CreatePerson(c *fiber.Ctx) error {
+	collection, err := GetMongoDBCollection(DBName, collectionName)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
 
 	var person Person
@@ -65,18 +66,20 @@ func CreatePerson(c *fiber.Ctx) {
 	res, err := collection.InsertOne(context.Background(), person)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
 
 	response, _ := json.Marshal(res)
 	c.Send(response)
+
+	return nil
 }
 
-func UpdatePerson(c *fiber.Ctx) {
-	collection, err := GetMongoDbCollection(DB_NAME, collectionName)
+func UpdatePerson(c *fiber.Ctx) error {
+	collection, err := GetMongoDBCollection(DBName, collectionName)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
 	var person Person
 	json.Unmarshal([]byte(c.Body()), &person)
@@ -90,19 +93,21 @@ func UpdatePerson(c *fiber.Ctx) {
 
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
 
 	response, _ := json.Marshal(res)
 	c.Send(response)
+
+	return nil
 }
 
-func DeletePerson(c *fiber.Ctx) {
-	collection, err := GetMongoDbCollection(DB_NAME, collectionName)
+func DeletePerson(c *fiber.Ctx) error {
+	collection, err := GetMongoDBCollection(DBName, collectionName)
 
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
 
 	objID, _ := primitive.ObjectIDFromHex(c.Params("id"))
@@ -110,9 +115,11 @@ func DeletePerson(c *fiber.Ctx) {
 
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).Send([]byte(err.Error()))
-		return
+		return err
 	}
 
 	jsonResponse, _ := json.Marshal(res)
 	c.Send(jsonResponse)
+
+	return nil
 }

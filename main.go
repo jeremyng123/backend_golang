@@ -1,6 +1,10 @@
 package main
 
-import fiber "github.com/gofiber/fiber/v2"
+import (
+	"log"
+
+	fiber "github.com/gofiber/fiber/v2"
+)
 
 var app *fiber.App = fiber.New()
 
@@ -9,5 +13,8 @@ func main() {
 	app.Post("/person", CreatePerson)
 	app.Put("/person/:id", UpdatePerson)
 	app.Delete("/person/:id", DeletePerson)
-	app.Listen(port)
+	err := app.Listen(port)
+	if err != nil {
+		log.Fatal("Server exited with error message: ", err)
+	}
 }
